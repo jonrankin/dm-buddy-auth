@@ -4,7 +4,7 @@
 import jwt
 import datetime
 
-from stream_api import app, db, bcrypt
+from auth import app, db, bcrypt
 
 
 class User(db.Model):
