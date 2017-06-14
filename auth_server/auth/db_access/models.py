@@ -1,10 +1,10 @@
-# api/db_access/models.py
+# stream_api/db_access/models.py
 
 
 import jwt
 import datetime
 
-from auth import app, db, bcrypt
+from stream_api import app, db, bcrypt
 
 
 class User(db.Model):
@@ -20,7 +20,8 @@ class User(db.Model):
     last_login =  db.Column(db.DateTime, nullable=True)
     streams = db.relationship('Stream', backref='user',
                                 lazy='dynamic')
-
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
     def __init__(self, email, username, password, admin=False):
         self.email = email
@@ -144,21 +145,26 @@ class Stream(db.Model):
         self.created_by = created_by
         self.date_added = datetime.datetime.now()
 
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 class Question(db.Model):
     """ Model for storing Question related details. """
     __tablename__ = "questions"
 
     question_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    question_name = db.Column(db.VARCHAR(12), unique=True, nullable=False)
+    question_name = db.Column(db.VARCHAR(64), unique=False, nullable=False)
     question_data = db.Column(db.JSON, nullable=True)
     date_added = db.Column(db.DateTime, nullable=False)
     stream_id = db.Column(db.Integer, db.ForeignKey('streams.stream_id'))
     created_by = db.Column(db.Integer, unique=False, nullable=False)
 
-    def __init__(self, stream_name, stream_desc, stream_id, created_by):
-        self.question_name = stream_name
-        self.question_desc = stream_desc
+    def __init__(self, question_name, question_data, stream_id, created_by):
+        self.question_name = question_name
+        self.question_data = question_data
         self.created_by = created_by
         self.stream_id = stream_id
         self.date_added = datetime.datetime.now()
+
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
