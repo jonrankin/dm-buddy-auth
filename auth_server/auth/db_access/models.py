@@ -50,6 +50,7 @@ class User(db.Model):
                 app.config.get('SECRET_KEY'),
                 algorithm='HS256'
             )
+
         except Exception as e:
             return e
 

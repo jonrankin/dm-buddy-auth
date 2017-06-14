@@ -11,7 +11,10 @@ import config as api_config
 
 app = Flask(__name__)
 
-app_settings = api_config.AppConfig
+app_settings = os.getenv(
+    'APP_SETTINGS',
+    'auth.config.TestingConfig'
+)
 
 
 app.config.from_object(app_settings)

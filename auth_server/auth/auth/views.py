@@ -10,7 +10,7 @@ from auth.auth_library import protected_resource
 
 auth_blueprint = Blueprint('auth', __name__)
 
-
+import json
 
 class RegisterAPI(MethodView):
     """
@@ -29,7 +29,6 @@ class RegisterAPI(MethodView):
                     password=post_data.get('password'),
                     username=post_data.get('username')
                 )
-
                 # insert the user
                 db.session.add(user)
                 db.session.commit()
@@ -39,13 +38,13 @@ class RegisterAPI(MethodView):
                     'status': 'success',
                     'message': 'Successfully registered.',
                     'refresh_token': refresh_token.decode(),
-                    'access_token': (User.encode_access_token(user.id)).decode()
+                    'access_token': 'were made'
                 }
                 return make_response(jsonify(responseObject)), 201
             except Exception as e:
                 responseObject = {
                     'status': 'fail',
-                    'message': 'Some error occurred. Please try again.'
+                    'message': "Something went wrong"
                 }
                 return make_response(jsonify(responseObject)), 401
         else:

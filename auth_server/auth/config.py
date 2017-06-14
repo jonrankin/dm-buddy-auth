@@ -18,8 +18,10 @@ class AppConfig:
 
 class TestingConfig:
     """Testing configuration."""
+    SECRET_KEY = os.getenv('SECRET_KEY', 'my_precious')
     DEBUG = True
-    TESTING = True
+    TESTING = False
     BCRYPT_LOG_ROUNDS = 4
     SQLALCHEMY_DATABASE_URI = DatabaseConfig.DATABASE_URI + '_test'
-    PRESERVE_CONTEXT_ON_EXCEPTION = False
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
